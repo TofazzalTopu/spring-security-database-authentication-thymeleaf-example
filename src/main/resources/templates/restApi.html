@@ -1,0 +1,49 @@
+<html ng-app="testApp" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>AngularJS $Http service tutorial example</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+    <!--<script type="text/javascript" src="/static/js/custom/restApi/restApi.js"/>-->
+    <script type="text/javascript" th:src="@{/js/custom/restApi/restApi.js}"></script>
+    <script type="text/javascript">
+        var testApp = angular.module("testApp", []);
+        testApp.controller("testController", function($scope, $http) {
+            $scope.home = "This is the homepage";
+
+            // $scope.getRequest = function() {
+                console.log("I've been pressed!");
+                $http.get("http://localhost:9090/vote-app/api/getQuestions").then(
+                    function successCallback(response) {
+                        $scope.questionList = response.data;
+                        console.log("data "+ JSON.stringify(response.data[0]))
+                    },
+                    function errorCallback(response) {
+                        console.log("Unable to perform get request");
+                    }
+                );
+            // };
+        });
+    </script>
+
+</head>
+<body ng-controller="testController">
+<h2>$http Service Tutorial</h2>
+<h2>{{ home }}</h2>
+
+<button ng-click="getRequest()">Test Rest</button>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Description</th>
+    </tr>
+
+    <tr ng-repeat="questions in questionList">
+        <td>{{ questions.id }}</td>
+        <td>{{ questions.description }}</td>
+    </tr>
+
+</table>
+
+</body>
+</html>
